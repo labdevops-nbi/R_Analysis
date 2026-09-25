@@ -38,8 +38,9 @@ jobs:
         run: |
           ssh -i ~/.ssh/deploy_key \
             '${{ vars.SERVER_USER }}@${{ vars.SERVER_IP }}' << 'EOF'
-          set -e         
+          set -e  
+          mkdir -p /var/www/script/Workflow/R_COMMON_Demo       
           unzip -o /tmp/r_common.zip \
-            -d /var/www/script/Workflow/R_COMMON
+            -d /var/www/script/Workflow/R_COMMON_Demo
           rm -f /tmp/r_common.zip
           EOF
