@@ -40,6 +40,6 @@ jobs:
             '${{ vars.SERVER_USER }}@${{ vars.SERVER_IP }}' << 'EOF'
           set -e         
           unzip -o /tmp/r_common.zip \
-            -d /var/www/script/Workflow/R_Common
-          rm -f /tmp/ml_scripts_data.zip
+            -d /var/www/script/Workflow/R_COMMON
+          rm -f /tmp/r_common.zip
           EOF
