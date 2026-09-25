@@ -68,3 +68,6 @@ for (i in sample_list_GC_ENG) {
 arrange_folder_structure(batch_id, language = "ENG")
 
 print("Analysis for batch completed. Check the files in the output folders.")
+
+
+## update CICD 25/09/2026
