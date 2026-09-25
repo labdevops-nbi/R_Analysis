@@ -1,0 +1,45 @@
+name: Deploy ML scripts
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create deployment package
+        run: |
+          zip -r r_common.zip . \
+            -x '.git/*' \
+            -x '.github/*'
+          ls -lh r_common.zip
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' '${{ secrets.SERVER_PRIVATEKEY }}' > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H '${{ vars.SERVER_IP }}' >> ~/.ssh/known_hosts
+
+      - name: Copy package to server
+        run: |
+          scp -i ~/.ssh/deploy_key \
+            r_common.zip \
+            '${{ vars.SERVER_USER }}@${{ vars.SERVER_IP }}:/tmp/r_common.zip'
+
+      - name: Extract package on server
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+            '${{ vars.SERVER_USER }}@${{ vars.SERVER_IP }}' << 'EOF'
+          set -e         
+          unzip -o /tmp/r_common.zip \
+            -d /var/www/script/Workflow/R_Common
+          rm -f /tmp/ml_scripts_data.zip
+          EOF
