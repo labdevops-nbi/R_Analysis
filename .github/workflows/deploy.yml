@@ -1,4 +1,4 @@
-name: Deploy ML scripts
+name: Deploy R Analysis scripts
 
 on:
   push:
